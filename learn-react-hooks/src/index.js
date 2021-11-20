@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import HelloWorld from './HelloWorld';
+import { Clicker } from './Chapter-1';
 
 ReactDOM.render(
-  <HelloWorld style={{color: 'tomato'}} />,
+  <Clicker />,
   document.getElementById('root')
 );
