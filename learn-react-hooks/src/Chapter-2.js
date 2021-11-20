@@ -1,20 +1,35 @@
-import { useState } from "react";
+import { useState } from 'react';
+
+function useMergedState(initialState) {
+  const [state, setState] = useState(initialState);
+
+  const mergeState = (changes) => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        ...changes,
+      };
+    });
+  };
+
+  return [state, mergeState];
+}
 
 function FormField(props) {
-  const {name, label, value, onChange, type = 'text' } = props;
-  
+  const { name, label, value, onChange, type = 'text' } = props;
+
   return (
     <div>
       <label htmlFor="firstName">{label}</label>
-      <input 
+      <input
         name={name}
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />
     </div>
-  )
-} 
+  );
+}
 
 const DEFAULT_AGE = 21;
 
@@ -22,61 +37,46 @@ const initialState = {
   firstName: '',
   lastName: '',
   age: DEFAULT_AGE,
-}
+};
 
-export function FormExample () {
-  const [state, setState] = useState(initialState);
+export function FormExample() {
+  const [state, setData] = useMergedState(initialState);
 
   const clear = () => {
-    setState(initialState);
+    setData(initialState);
   };
 
   return (
     <>
       <form>
-        <FormField 
+        <FormField
           name="firstName"
           label="First Name"
           value={state.firstName}
-          onChange={(newValue) => setState((prevState) => {
-            return {
-              ...prevState,
-              firstName: newValue
-            }
-          })}
+          onChange={(firstName) => setData({firstName})}
         />
-        <FormField 
+        <FormField
           name="lastName"
           label="Last Name"
           value={state.lastName}
-          onChange={(newValue) => setState((prevState) => {
-            return {
-              ...prevState,
-              lastName: newValue
-            }
-          })}
+          onChange={(lastName) => setData({lastName})}
         />
-        <FormField 
+        <FormField
           name="age"
           label="age"
           value={state.age}
-          type = "number"
-          onChange={(newValue) => setState((prevState) => {
-            return {
-              ...prevState,
-              age: newValue ? parseInt(newValue) : 0
-            }
-          })}
+          type="number"
+          onChange={(age) => setData({age: age ? parseInt(age) : ''})}
         />
       </form>
       <div>
         <button onClick={clear}>CLEAR</button>
       </div>
       <div>
-        fistName: {state.firstName}, <br/>
-        lastName: {state.lastName}, <br/>
+        fistName: {state.firstName}, <br />
+        lastName: {state.lastName}, <br />
         age: {state.age}
       </div>
     </>
-  )
+  );
 }
