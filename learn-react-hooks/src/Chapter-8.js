@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { useCounter } from './Chapter-3'
 
 function useUpdateEffect(callback) {
   const firstRender = useRef(true);
@@ -13,44 +14,19 @@ function useUpdateEffect(callback) {
 }
 
 export function Example() {
-  const refContainer = useRef();
-  const toggledRef = useRef(false);
-  const [toggledState, setToggleState] = useState(false);
+ const [value, increment] = useCounter();
 
-  const focusInput = () => {
-    refContainer.current?.focus();
-  };
+ useEffect(() => {
+   console.log('mounted');
+ }, []);
 
-  const onChange = (event) => {
-    const text = event.target.value;
-    if (text === 'blur') {
-      refContainer.current?.blur();
-    }
-  };
+ console.log(`render, value ${value}`);
 
-  const changeRef = () => {
-    toggledRef.current = !toggledRef.current;
-    console.log(`toggled to: ${toggledRef.current}`);
-  };
+ const callback = useCallback(() => {
+   console.log(` value update: ${value}`);
+ }, [value]);
 
-  const changeState = () => {
-    setToggleState((prev) => !prev);
-  };
-
-  console.log(
-    `toggledRef: ${toggledRef.current}, toggledState: ${toggledState}`,
-  );
-
-  return (
-    <div>
-      <input ref={refContainer} onChange={onChange} />
-      <p>
-        <button onClick={focusInput}>FOCUS</button>
-      </p>
-      <p>
-        <button onClick={changeRef}>TOGGLE REF</button>
-        <button onClick={changeState}>TOGGLE STATE</button>
-      </p>
-    </div>
-  );
+ useUpdateEffect(callback);
+ 
+ return <button onClick={increment}>REREBDER</button>
 }
