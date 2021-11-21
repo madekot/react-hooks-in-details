@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Calculator } from './Chapter-5';
+import { Counter } from './Chapter-6';
 
 ReactDOM.render(
-  <Calculator />,
+  <Counter />,
   document.getElementById('root')
 );
